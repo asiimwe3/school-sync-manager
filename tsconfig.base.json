@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Strict guardrails */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+
+    /* Path aliases — no brittle relative cross-workspace imports */
+    "paths": {
+      "@ssm/lib/*":        ["../../lib/*"],
+      "@ssm/validation":   ["../../lib/shared/validation/index.ts"],
+      "@ssm/utils":        ["../../lib/utils/index.ts"],
+      "@ssm/sync":         ["../../lib/sync/index.ts"],
+      "@ssm/db":           ["../../lib/db/index.ts"],
+      "@ssm/ui/*":         ["../../apps/web/src/components/ui/*"]
+    },
+    "baseUrl": "."
+  }
+}
