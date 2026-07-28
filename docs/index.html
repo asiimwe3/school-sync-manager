@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>school-sync-manager — Documentation</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0d1117;
+            --surface: #161b22;
+            --border: #30363d;
+            --text: #e6edf3;
+            --muted: #8b949e;
+            --accent: #58a6ff;
+            --green: #3fb950;
+            --orange: #d29922;
+            --radius: 8px;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 40px 0 32px;
+        }
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        header .tagline {
+            color: var(--muted);
+            font-size: 1.05rem;
+            margin-bottom: 16px;
+        }
+        .badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+        .badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 4px 12px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 500;
+            border: 1px solid var(--border);
+            background: var(--surface);
+        }
+        .badge-lang { color: var(--accent); border-color: var(--accent); }
+        .badge-type { color: var(--green); border-color: var(--green); }
+        .badge-updated { color: var(--orange); border-color: var(--orange); }
+        .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 16px; border-radius: var(--radius);
+            font-size: 0.9rem; font-weight: 600; text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn-gh { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+        .btn-gh:hover { border-color: var(--accent); }
+        .btn-live { background: #238636; color: white; border: 1px solid #238636; }
+        .btn-live:hover { background: #2ea043; }
+        
+        /* Nav */
+        nav {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 0;
+            position: sticky; top: 0; z-index: 10;
+        }
+        nav .container { display: flex; gap: 4px; overflow-x: auto; }
+        nav a {
+            color: var(--muted); text-decoration: none; font-size: 0.85rem;
+            padding: 6px 12px; border-radius: var(--radius); white-space: nowrap;
+            transition: all 0.2s;
+        }
+        nav a:hover { color: var(--text); background: var(--bg); }
+        
+        /* Content */
+        main { padding: 32px 0 64px; }
+        .doc-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px 28px;
+            margin-bottom: 20px;
+        }
+        .doc-section h2 {
+            font-size: 1.3rem; margin-bottom: 12px;
+            padding-bottom: 8px; border-bottom: 1px solid var(--border);
+            color: var(--accent);
+        }
+        .doc-section h3 { font-size: 1.1rem; margin: 16px 0 8px; color: var(--text); }
+        .doc-section h4 { font-size: 1rem; margin: 12px 0 6px; color: var(--muted); }
+        .doc-content p { margin-bottom: 10px; color: var(--text); }
+        .doc-content ul, .doc-content ol { margin: 8px 0 16px 20px; }
+        .doc-content li { margin-bottom: 4px; color: var(--text); }
+        .doc-content code {
+            background: var(--bg); padding: 2px 6px; border-radius: 4px;
+            font-size: 0.85rem; color: var(--accent);
+        }
+        .doc-content pre {
+            background: var(--bg); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 14px; overflow-x: auto;
+            margin: 12px 0;
+        }
+        .doc-content pre code { background: none; padding: 0; color: var(--text); }
+        
+        /* Info cards */
+        .info-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px; margin-bottom: 24px;
+        }
+        .info-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 16px;
+        }
+        .info-card .label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .info-card .value { font-size: 0.95rem; margin-top: 4px; }
+        
+        .topics { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+        .topic { font-size: 0.75rem; color: var(--accent); background: rgba(88,166,255,0.1); padding: 2px 10px; border-radius: 12px; }
+        
+        footer {
+            border-top: 1px solid var(--border); padding: 24px 0; text-align: center;
+            color: var(--muted); font-size: 0.85rem;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+        
+        @media (max-width: 640px) {
+            header h1 { font-size: 1.5rem; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h1>📖 school-sync-manager</h1>
+        <p class="tagline">Uganda School Management System — TypeScript monorepo with offline sync, Zod validation, and React Hook Form</p>
+        <div class="badges">
+            <span class="badge badge-lang">⚡ TypeScript</span>
+            <span class="badge badge-type">📦 Web Application (Vite + React)</span>
+            <span class="badge badge-updated">📅 Updated 2026-06-25</span>
+        </div>
+        <div class="topics"><span class="topic">No topics</span></div>
+        <div class="actions" style="margin-top:16px">
+            <a href="https://github.com/asiimwe3/school-sync-manager" class="btn btn-gh" target="_blank">📂 View on GitHub</a>
+            
+        </div>
+    </div>
+</header>
+
+<nav>
+    <div class="container">
+        <a href="#overview">Overview</a>
+        <a href="#school-sync-manager-🇺🇬">School Sync Manager 🇺🇬</a><a href="#architecture">Architecture</a><a href="#key-features">Key Features</a><a href="#getting-started">Getting Started</a><a href="#running-tests">Running Tests</a><a href="#tech-stack">Tech Stack</a>
+    </div>
+</nav>
+
+<main>
+    <div class="container">
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="label">Language</div>
+                <div class="value">TypeScript</div>
+            </div>
+            <div class="info-card">
+                <div class="label">Project Type</div>
+                <div class="value">Web Application (Vite + React)</div>
+            </div>
+            <div class="info-card">
+                <div class="label">Last Updated</div>
+                <div class="value">2026-06-25</div>
+            </div>
+            <div class="info-card">
+                <div class="label">Repository</div>
+                <div class="value"><a href="https://github.com/asiimwe3/school-sync-manager" style="color:var(--accent);text-decoration:none">asiimwe3/school-sync-manager</a></div>
+            </div>
+        </div>
+        
+        <section class="doc-section" id="overview">
+            <h2>Overview</h2>
+            <div class="doc-content">
+                <p>Uganda School Management System — TypeScript monorepo with offline sync, Zod validation, and React Hook Form</p>
+                <p>This project is maintained by <a href="https://github.com/asiimwe3" style="color:var(--accent);text-decoration:none">asiimwe3</a> on GitHub. </p>
+            </div>
+        </section>
+        
+        
+        <section class="doc-section" id="school-sync-manager-🇺🇬">
+            <h2>School Sync Manager 🇺🇬</h2>
+            <div class="doc-content">&gt; Uganda School Management System — TypeScript monorepo with offline-first sync, Zod validation, and React Hook Form.</div>
+        </section>
+        <section class="doc-section" id="architecture">
+            <h2>Architecture</h2>
+            <div class="doc-content"><pre><code>school-sync-manager/
+├── tsconfig.base.json          # Strict TS + workspace path aliases
+├── package.json                # Turborepo workspaces
+├── apps/
+│   └── web/
+│       └── src/
+│           ├── providers/
+│           │   └── SyncProvider.tsx      # useSyncManager() hook
+│           ├── components/
+│           │   ├── ui/
+│           │   │   ├── Combobox.tsx      # Searchable Ugandan districts
+│           │   │   ├── CurrencyCard.tsx  # formatUGX() dashboard cards
+│           │   │   └── SyncStatusBar.tsx # Online/offline indicator
+│           │   └── forms/
+│           │       └── SchoolSettingsForm.tsx  # RHF + Zod
+│           ├── hooks/__mocks__/
+│           │   └── useSyncManager.ts    # Vitest mock
+│           └── __tests__/
+│               ├── utils.test.ts
+│               └── validation.test.ts
+└── lib/
+├── shared/validation/index.ts  # Zod schemas + 135 Ugandan districts
+├── utils/index.ts              # formatUGX, formatUGXRaw, phone utils
+├── db/index.ts                 # IndexedDB offline mutation queue
+└── sync/index.ts               # SyncManager (pure class, no React)
+</code></pre></div>
+        </section>
+        <section class="doc-section" id="key-features">
+            <h2>Key Features</h2>
+            <div class="doc-content"><ul>
+<li>**Offline-first**: mutations queue in IndexedDB, auto-flush on reconnect</li>
+<li>**Ugandan districts**: all 135 districts as a Zod enum + searchable combobox</li>
+<li>**Phone validation**: MTN (077/079), Airtel (070/078), Africell (075)</li>
+<li>**Currency**: <code>formatUGX(5000000)</code> → <code>UGX 5M</code> in cards; raw integers in forms</li>
+<li>**Strict TypeScript**: <code>noUncheckedIndexedAccess</code>, <code>exactOptionalPropertyTypes</code></li>
+<li>**Test-ready**: Vitest mocks + unit tests for utils and validation</li>
+</ul></div>
+        </section>
+        <section class="doc-section" id="getting-started">
+            <h2>Getting Started</h2>
+            <div class="doc-content"><pre><code>npm install
+npm run dev
+</code></pre></div>
+        </section>
+        <section class="doc-section" id="running-tests">
+            <h2>Running Tests</h2>
+            <div class="doc-content"><pre><code>npm run test
+</code></pre></div>
+        </section>
+        <section class="doc-section" id="tech-stack">
+            <h2>Tech Stack</h2>
+            <div class="doc-content"><ul>
+<li>TypeScript 5.4 (strict)</li>
+<li>React 18 + React Hook Form</li>
+<li>Zod</li>
+<li>IndexedDB (offline queue)</li>
+<li>Vitest</li>
+<li>Turborepo</li>
+</ul></div>
+        </section>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <p>Generated on 2026-07-28 · <a href="https://github.com/asiimwe3/school-sync-manager">asiimwe3/school-sync-manager</a></p>
+    </div>
+</footer>
+
+</body>
+</html>
