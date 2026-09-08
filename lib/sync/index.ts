@@ -29,6 +29,8 @@ export interface SyncManagerOptions {
   maxRetries?: number;
   /** Cloud API base URL */
   apiBaseUrl?: string;
+  /** v1: local-first mode — keep mutations queued for a future cloud backend, never fetch */
+  localOnly?: boolean;
 }
 
 const DEFAULT_MAX_RETRIES = 3;
@@ -43,6 +45,7 @@ export class SyncManager {
       onMutationError:   options.onMutationError   ?? (() => {}),
       maxRetries:        options.maxRetries         ?? DEFAULT_MAX_RETRIES,
       apiBaseUrl:        options.apiBaseUrl         ?? "/api",
+      localOnly:         options.localOnly          ?? false,
     };
   }
 
@@ -60,6 +63,7 @@ export class SyncManager {
 
   /** Push all pending mutations to the cloud in FIFO order. */
   async flush(): Promise<void> {
+    if (this.options.localOnly) return; // v1 local-first: queue stays pending until a cloud backend exists
     if (this.isFlushing) return;
     this.isFlushing = true;
 
@@ -105,13 +109,14 @@ export class SyncManager {
       delete: "DELETE",
     };
 
-    const res = await fetch(url, {
+    const init: RequestInit = {
       method: method[mutation.operation],
       headers: { "Content-Type": "application/json" },
-      body: mutation.operation !== "delete"
-        ? JSON.stringify(mutation.payload)
-        : undefined,
-    });
+    };
+    if (mutation.operation !== "delete") {
+      init.body = JSON.stringify(mutation.payload);
+    }
+    const res = await fetch(url, init);
 
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}: ${await res.text()}`);

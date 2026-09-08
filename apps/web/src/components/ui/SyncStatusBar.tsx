@@ -4,7 +4,7 @@
  */
 "use client";
 
-import { useSyncManager } from "@ssm/lib/../../../apps/web/src/providers/SyncProvider";
+import { useSyncManager } from "../../providers/SyncProvider";
 
 const STATUS_CONFIG = {
   idle:    { color: "#38a169", icon: "✓", label: "Synced" },

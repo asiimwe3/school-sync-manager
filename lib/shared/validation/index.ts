@@ -51,7 +51,7 @@ export const ugandaPhoneSchema = z
 export const schoolSettingsSchema = z.object({
   schoolName:   z.string().min(3, "School name must be at least 3 characters"),
   district:     z.enum(UGANDAN_DISTRICTS, {
-                  errorMap: () => ({ message: "Select a valid Ugandan district" }),
+                  error: "Select a valid Ugandan district",
                 }),
   address:      z.string().min(5, "Enter a full address"),
   contactPhone: ugandaPhoneSchema,

@@ -41,6 +41,8 @@ const SyncContext = createContext<SyncContextValue | null>(null);
 interface SyncProviderProps {
   children: ReactNode;
   apiBaseUrl?: string;
+  /** v1 local-first mode — queue mutations for a future cloud backend, never fetch */
+  localOnly?: boolean;
   /** Override for tests — inject a mock SyncManager */
   _mockManager?: SyncManager;
 }
@@ -48,6 +50,7 @@ interface SyncProviderProps {
 export function SyncProvider({
   children,
   apiBaseUrl = "/api",
+  localOnly = false,
   _mockManager,
 }: SyncProviderProps) {
   const [isOnline,     setIsOnline]     = useState(
@@ -59,6 +62,7 @@ export function SyncProvider({
   const managerRef = useRef<SyncManager>(
     _mockManager ?? new SyncManager({
       apiBaseUrl,
+      localOnly,
       onMutationSuccess: () => void refreshCount(),
       onMutationError:   (m: PendingMutation) =>
         console.error("[SSM] Mutation failed permanently:", m),

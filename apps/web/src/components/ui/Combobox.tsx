@@ -14,7 +14,7 @@ interface ComboboxProps<T extends string> {
   onChange:    (value: T) => void;
   placeholder?: string;
   label?:      string;
-  error?:      string;
+  error?:      string | undefined;
   id?:         string;
 }
 
@@ -27,7 +27,7 @@ export function Combobox<T extends string>({
   error,
   id = "combobox",
 }: ComboboxProps<T>) {
-  const [query,       setQuery]       = useState(value);
+  const [query,       setQuery]       = useState<string>(value);
   const [open,        setOpen]        = useState(false);
   const [highlighted, setHighlighted] = useState(0);
   const listRef = useRef<HTMLUListElement>(null);

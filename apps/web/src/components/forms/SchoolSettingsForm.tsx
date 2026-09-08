@@ -20,15 +20,18 @@ import { useSyncManager } from "../../providers/SyncProvider";
 import { Combobox } from "../ui/Combobox";
 
 interface SchoolSettingsFormProps {
-  defaultValues?: Partial<SchoolSettingsInput>;
+  defaultValues?: Partial<SchoolSettingsInput> | undefined;
   schoolId: string;
   onSuccess?: () => void;
+  /** Local persistence callback — v1 local-first store. Called with validated data on submit. */
+  onSave?: (data: SchoolSettingsInput) => void;
 }
 
 export function SchoolSettingsForm({
   defaultValues,
   schoolId,
   onSuccess,
+  onSave,
 }: SchoolSettingsFormProps) {
   const { mutate, isOnline } = useSyncManager();
 
@@ -54,6 +57,7 @@ export function SchoolSettingsForm({
   const termFee = watch("termFee");
 
   const onSubmit = async (data: SchoolSettingsInput) => {
+    onSave?.(data);
     await mutate("school", "update", { id: schoolId, ...data });
     onSuccess?.();
   };
@@ -193,8 +197,8 @@ function Field({
   label, error, hint, children,
 }: {
   label: string;
-  error?: string;
-  hint?: string;
+  error?: string | undefined;
+  hint?: string | undefined;
   children: React.ReactNode;
 }) {
   return (
